@@ -29,6 +29,8 @@ class LogSearchType extends AbstractType {
                 'required' => false,
             ))
             ->add('level', FormTypes\ChoiceType::class, array(
+                'placeholder' => 'log.search.all',
+                'translation_domain' => 'LexikMonologBrowserBundle',
                 'choices' => $options['log_levels'],
                 'required' => false,
             ))
