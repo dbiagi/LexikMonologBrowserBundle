@@ -23,7 +23,7 @@ class DefaultController extends Controller
         try {
             $query = $this->getLogRepository()->getLogsQueryBuilder();
 
-            $filter = $this->get('form.factory')->create(new LogSearchType(), null, array(
+            $filter = $this->createForm(LogSearchType::class, null, array(
                 'query_builder' => $query,
                 'log_levels'    => $this->getLogRepository()->getLogsLevel(),
             ));
