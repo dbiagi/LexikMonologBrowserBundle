@@ -54,18 +54,18 @@
             </thead>
             <tbody>
                 {% for log in pagination %}
-                <tr>
-                    <td>{{ date(log.datetime) | date('F j H:i:s') }}</td>
-                    <td>{{ utils.render_count_badge(log.count) }}</td>
-                    <td>
-                        <a href="{{ path('lexik_monolog_browser_show', { 'id': log.id }) }}">
-                            {{ log.message }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ utils.render_level_label(log.level, (log.channel ~ '.' ~ log.level_name)) }}
-                    </td>
-                </tr>
+                    <tr>
+                        <td>{{ date(log.datetime) | date('F j H:i:s') }}</td>
+                        <td>{{ utils.render_count_badge(log.count) }}</td>
+                        <td>
+                            <a href="{{ path('lexik_monolog_browser_show', { 'id': log.id }) }}">
+                                {{ log.message }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ utils.render_level_label(log.level, (log.channel ~ '.' ~ log.level_name)) }}
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
