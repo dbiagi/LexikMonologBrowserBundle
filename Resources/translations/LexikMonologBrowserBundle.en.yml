@@ -4,6 +4,7 @@ log:
         level:      Level
         date_from:  From
         date_to:    To
+        all:        All
     results:
         datetime:   Date
         message:    Message

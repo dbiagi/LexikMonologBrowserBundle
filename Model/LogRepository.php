@@ -134,7 +134,8 @@ class LogRepository
 
         $normalizedLevels = array();
         foreach ($levels as $level) {
-            $normalizedLevels[$level['level']] = sprintf('%s (%s)', $level['level_name'], $level['count']);
+            $desc = sprintf('%s (%s)', $level['level_name'], $level['count']);
+            $normalizedLevels[$desc] = $level['level'];
         }
 
         return $normalizedLevels;
