@@ -13,7 +13,7 @@
         {
             "name": "Dev Lexik",
             "email": "dev@lexik.fr"
-        },
+        }
     ],
     "minimum-stability": "dev",
     "require": {
