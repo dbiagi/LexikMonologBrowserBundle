@@ -90,7 +90,7 @@
             {% for label, value in data %}
                 <tr>
                     <th>{{ label }}</th>
-                    <td>{{ value }}</td>
+                    <td>{{ value|nl2br }}</td>
                 </tr>
             {% endfor %}
         </tbody>
