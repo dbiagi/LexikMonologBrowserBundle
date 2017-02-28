@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\MonologBrowserBundle\Processor;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -16,10 +15,10 @@ class TokenProcessor {
     /** @var TokenStorage */
     private $tokenStorage;
 
-    /** @var Serializer */
+    /** @var SerializerInterface */
     private $serializer;
 
-    function __construct(TokenStorage $tokenStorage, SerializerInterface $serializer) {
+    function __construct(TokenStorage $tokenStorage, $serializer) {
         $this->tokenStorage = $tokenStorage;
         $this->serializer = $serializer;
     }

@@ -10,8 +10,6 @@ use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Monolog\Processor\WebProcessor;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Handler to send messages to a database through Doctrine DBAL.
@@ -30,12 +28,12 @@ class DoctrineDBALHandler extends AbstractProcessingHandler {
     private $tableName;
 
     /**
-     * @param TokenStorage                   $tokenStorage
-     * @param SerializerInterface $serializer
-     * @param bool|int                       $level
-     * @param boolean                        $bubble
+     * @param TokenStorage $tokenStorage
+     * @param              $serializer
+     * @param bool|int     $level
+     * @param boolean      $bubble
      */
-    public function __construct(TokenStorage $tokenStorage, SerializerInterface $serializer, $level = Logger::DEBUG, $bubble = true) {
+    public function __construct(TokenStorage $tokenStorage, $serializer, $level = Logger::DEBUG, $bubble = true) {
         parent::__construct($level, $bubble);
 
         $this->pushProcessor(new WebProcessor());
@@ -53,7 +51,7 @@ class DoctrineDBALHandler extends AbstractProcessingHandler {
     /**
      * @param string $tableName
      */
-    public function setTableName($tableName){
+    public function setTableName($tableName) {
         $this->tableName = $tableName;
     }
 
