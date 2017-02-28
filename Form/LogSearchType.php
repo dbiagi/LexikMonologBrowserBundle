@@ -6,7 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type as FormTypes;
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -93,6 +92,9 @@ class LogSearchType extends AbstractType {
         });
     }
 
+    /**
+     * @inheritdoc
+     */
     public function configureOptions(OptionsResolver $resolver) {
         $resolver
             ->setRequired(array(
@@ -105,25 +107,6 @@ class LogSearchType extends AbstractType {
             ->setAllowedTypes('log_levels', 'array')
             ->setAllowedTypes('query_builder', '\Doctrine\DBAL\Query\QueryBuilder')
 
-        ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        $resolver
-            ->setRequired(array(
-                'query_builder',
-            ))
-            ->setDefaults(array(
-                'log_levels' => array(),
-                'csrf_protection' => false,
-            ))
-            ->setAllowedTypes('search', array(
-                'log_levels' => 'array',
-                'query_builder' => '\Doctrine\DBAL\Query\QueryBuilder',
-            ))
         ;
     }
 
