@@ -1,7 +1,7 @@
-$(function() {
+$(function () {
     $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        autoclose: true,
+        format:         'dd/mm/yyyy',
+        autoclose:      true,
         todayHighlight: true
     });
 });

@@ -1,2 +1,11 @@
-.wrapper { margin-top: 15px; }
-.bg-error { background-color: #f2dede; }
+.wrapper {
+    margin-top: 15px;
+}
+
+.bg-error {
+    background-color: #f2dede;
+}
+
+body {
+    word-wrap: break-word;
+}

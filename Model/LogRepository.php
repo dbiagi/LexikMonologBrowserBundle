@@ -4,13 +4,10 @@ namespace Lexik\Bundle\MonologBrowserBundle\Model;
 
 use Doctrine\DBAL\Driver\Connection;
 
-use Lexik\Bundle\MonologBrowserBundle\Model\Log;
-
 /**
  * @author Jeremy Barthe <j.barthe@lexik.fr>
  */
-class LogRepository
-{
+class LogRepository {
     /**
      * @var Connection $conn
      */
@@ -25,18 +22,9 @@ class LogRepository
      * @param Connection $conn
      * @param string     $tableName
      */
-    public function __construct(Connection $conn, $tableName)
-    {
-        $this->conn      = $conn;
+    public function __construct(Connection $conn, $tableName) {
+        $this->conn = $conn;
         $this->tableName = $tableName;
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    protected function createQueryBuilder()
-    {
-        return $this->conn->createQueryBuilder();
     }
 
     /**
@@ -44,13 +32,14 @@ class LogRepository
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    public function getLogsQueryBuilder()
-    {
+    public function getLogsQueryBuilder() {
         return $this->createQueryBuilder()
-                    ->select('l.channel, l.level, l.level_name, l.message, MAX(l.id) AS id, MAX(l.datetime) AS datetime, COUNT(l.id) AS count')
-                    ->from($this->tableName, 'l')
-                    ->groupBy('l.channel, l.level, l.level_name, l.message')
-                    ->orderBy('datetime', 'DESC');
+            ->select(
+                'l.channel, l.level, l.level_name, l.message, MAX(l.id) AS id, MAX(l.datetime) AS datetime, COUNT(l.id) AS count'
+            )
+            ->from($this->tableName, 'l')
+            ->groupBy('l.channel, l.level, l.level_name, l.message')
+            ->orderBy('datetime', 'DESC');
     }
 
     /**
@@ -60,36 +49,34 @@ class LogRepository
      *
      * @return Log|null
      */
-    public function getLogById($id)
-    {
+    public function getLogById($id) {
         $log = $this->createQueryBuilder()
-                    ->select('l.*')
-                    ->from($this->tableName, 'l')
-                    ->where('l.id = :id')
-                    ->setParameter(':id', $id)
-                    ->execute()
-                    ->fetch();
+            ->select('l.*')
+            ->from($this->tableName, 'l')
+            ->where('l.id = :id')
+            ->setParameter(':id', $id)
+            ->execute()
+            ->fetch();
 
         if (false !== $log) {
             return new Log($log);
         }
     }
-    
+
     /**
      * Retrieve last log entry.
      *
      * @return Log|null
      */
-    public function getLastLog()
-    {
+    public function getLastLog() {
         $log = $this->createQueryBuilder()
-                    ->select('l.*')
-                    ->from($this->tableName, 'l')
-                    ->orderBy('l.id', 'DESC')
-                    ->setMaxResults(1)
-                    ->execute()
-                    ->fetch();
-        
+            ->select('l.*')
+            ->from($this->tableName, 'l')
+            ->orderBy('l.id', 'DESC')
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch();
+
         if (false !== $log) {
             return new Log($log);
         }
@@ -102,19 +89,18 @@ class LogRepository
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    public function getSimilarLogsQueryBuilder(Log $log)
-    {
+    public function getSimilarLogsQueryBuilder(Log $log) {
         return $this->createQueryBuilder()
-                    ->select('l.id, l.channel, l.level, l.level_name, l.message, l.datetime')
-                    ->from($this->tableName, 'l')
-                    ->andWhere('l.message = :message')
-                    ->andWhere('l.channel = :channel')
-                    ->andWhere('l.level = :level')
-                    ->andWhere('l.id != :id')
-                    ->setParameter(':message', $log->getMessage())
-                    ->setParameter(':channel', $log->getChannel())
-                    ->setParameter(':level', $log->getLevel())
-                    ->setParameter(':id', $log->getId());
+            ->select('l.id, l.channel, l.level, l.level_name, l.message, l.datetime')
+            ->from($this->tableName, 'l')
+            ->andWhere('l.message = :message')
+            ->andWhere('l.channel = :channel')
+            ->andWhere('l.level = :level')
+            ->andWhere('l.id != :id')
+            ->setParameter(':message', $log->getMessage())
+            ->setParameter(':channel', $log->getChannel())
+            ->setParameter(':level', $log->getLevel())
+            ->setParameter(':id', $log->getId());
     }
 
     /**
@@ -122,15 +108,14 @@ class LogRepository
      *
      * @return array
      */
-    public function getLogsLevel()
-    {
+    public function getLogsLevel() {
         $levels = $this->createQueryBuilder()
-                       ->select('l.level, l.level_name, COUNT(l.id) AS count')
-                       ->from($this->tableName, 'l')
-                       ->groupBy('l.level, l.level_name')
-                       ->orderBy('l.level', 'DESC')
-                       ->execute()
-                       ->fetchAll();
+            ->select('l.level, l.level_name, COUNT(l.id) AS count')
+            ->from($this->tableName, 'l')
+            ->groupBy('l.level, l.level_name')
+            ->orderBy('l.level', 'DESC')
+            ->execute()
+            ->fetchAll();
 
         $normalizedLevels = array();
         foreach ($levels as $level) {
@@ -139,5 +124,12 @@ class LogRepository
         }
 
         return $normalizedLevels;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function createQueryBuilder() {
+        return $this->conn->createQueryBuilder();
     }
 }

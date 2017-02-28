@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
@@ -12,9 +12,14 @@
     <services>
         <service id="lexik_monolog_browser.handler.doctrine_dbal"
                  class="%lexik_monolog_browser.handler.doctrine_dbal.class%">
-            <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection"/>
             <argument type="service" id="security.token_storage"/>
-            <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
+            <argument type="service" id="serializer"/>
+            <call method="setConnection">
+                <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection"/>
+            </call>
+            <call method="setTableName">
+                <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
+            </call>
         </service>
 
         <service id="lexik_monolog_browser.model.log_repository"

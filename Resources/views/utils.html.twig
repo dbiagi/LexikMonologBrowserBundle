@@ -13,7 +13,7 @@
 
     {% set attr = (attr|default({}))|merge({ 'class': (attr.class|default('') ~ ' label ' ~ level_class)|trim}) %}
     <span{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
-        {{ label }}
+    {{ label }}
     </span>
 {% endmacro %}
 

@@ -2,10 +2,10 @@
 
 namespace Lexik\Bundle\MonologBrowserBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\DBALException;
 use Lexik\Bundle\MonologBrowserBundle\Form\LogSearchType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Jeremy Barthe <j.barthe@lexik.fr>
@@ -20,26 +20,35 @@ class DefaultController extends Controller {
         try {
             $query = $this->getLogRepository()->getLogsQueryBuilder();
 
-            $filter = $this->createForm(LogSearchType::class, null, array(
-                'query_builder' => $query,
-                'log_levels' => $this->getLogRepository()->getLogsLevel(),
-            ));
-            
+            $filter = $this->createForm(
+                LogSearchType::class,
+                null,
+                array(
+                    'query_builder' => $query,
+                    'log_levels'    => $this->getLogRepository()->getLogsLevel(),
+                )
+            );
+
             $filter->submit($request->get($filter->getName()));
-            
+
             $pagination = $this->get('knp_paginator')->paginate(
-                $query, $request->query->get('page', 1), $this->container->getParameter('lexik_monolog_browser.logs_per_page')
+                $query,
+                $request->query->get('page', 1),
+                $this->container->getParameter('lexik_monolog_browser.logs_per_page')
             );
         } catch (DBALException $e) {
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
             $pagination = array();
         }
 
-        return $this->render('LexikMonologBrowserBundle:Default:index.html.twig', array(
-                'filter' => isset($filter) ? $filter->createView() : null,
-                'pagination' => $pagination,
+        return $this->render(
+            'LexikMonologBrowserBundle:Default:index.html.twig',
+            array(
+                'filter'      => isset($filter) ? $filter->createView() : null,
+                'pagination'  => $pagination,
                 'base_layout' => $this->getBaseLayout(),
-        ));
+            )
+        );
     }
 
     /**
@@ -58,14 +67,19 @@ class DefaultController extends Controller {
         $similarLogsQuery = $this->getLogRepository()->getSimilarLogsQueryBuilder($log);
 
         $similarLogs = $this->get('knp_paginator')->paginate(
-            $similarLogsQuery, $request->query->get('page', 1), 10
+            $similarLogsQuery,
+            $request->query->get('page', 1),
+            10
         );
 
-        return $this->render('LexikMonologBrowserBundle:Default:show.html.twig', array(
-                'log' => $log,
+        return $this->render(
+            'LexikMonologBrowserBundle:Default:show.html.twig',
+            array(
+                'log'          => $log,
                 'similar_logs' => $similarLogs,
-                'base_layout' => $this->getBaseLayout(),
-        ));
+                'base_layout'  => $this->getBaseLayout(),
+            )
+        );
     }
 
     /**

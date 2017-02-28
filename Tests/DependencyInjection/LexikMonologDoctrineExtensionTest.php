@@ -2,15 +2,11 @@
 
 namespace Lexik\Bundle\MonologBrowserBundle\Tests\DependencyInjection;
 
-use Symfony\Component\Yaml\Parser;
+use Lexik\Bundle\MonologBrowserBundle\DependencyInjection\LexikMonologBrowserExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use Lexik\Bundle\MonologBrowserBundle\DependencyInjection\LexikMonologBrowserExtension;
-
-class LexikMonologBrowserExtensionTest extends \PHPUnit_Framework_TestCase
-{
-    public function testConfigLoad()
-    {
+class LexikMonologBrowserExtensionTest extends \PHPUnit_Framework_TestCase {
+    public function testConfigLoad() {
         $extension = new LexikMonologBrowserExtension();
         $extension->load(array($this->getConfig()), $container = new ContainerBuilder());
 
@@ -23,8 +19,7 @@ class LexikMonologBrowserExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('lexik_monolog_browser.handler.doctrine_dbal'));
     }
 
-    protected function getConfig()
-    {
+    protected function getConfig() {
         return array(
             'base_layout' => 'test_layout.html.twig',
             'doctrine'    => array(

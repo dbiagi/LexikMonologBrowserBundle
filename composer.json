@@ -2,7 +2,13 @@
     "name": "dbiagi/monolog-browser-bundle",
     "type": "symfony-bundle",
     "description": "This Symfony3 bundle provides a Doctrine DBAL handler for Monolog and a web UI to display log entries",
-    "keywords": ["Symfony3", "bundle", "monolog", "logger", "doctrine"],
+    "keywords": [
+        "Symfony3",
+        "bundle",
+        "monolog",
+        "logger",
+        "doctrine"
+    ],
     "homepage": "https://github.com/dbiagi/LexikMonologBrowserBundle",
     "license": "MIT",
     "authors": [
@@ -18,7 +24,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.5.9",
-        "symfony/framework-bundle": "~2.7|~3.0",
+        "symfony/framework-bundle": "^3.2",
         "knplabs/knp-paginator-bundle": ">=2.3"
     },
     "require-dev": {
@@ -26,6 +32,8 @@
         "doctrine/dbal": "~2.4"
     },
     "autoload": {
-        "psr-4": { "Lexik\\Bundle\\MonologBrowserBundle\\": "" }
+        "psr-4": {
+            "Lexik\\Bundle\\MonologBrowserBundle\\": ""
+        }
     }
 }

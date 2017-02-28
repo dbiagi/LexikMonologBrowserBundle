@@ -13,4 +13,5 @@ log:
         extra:      Extra
         context:    Contexto
         request:    Requisição
+        user:       Usuário
         similar:    Logs parecidos
