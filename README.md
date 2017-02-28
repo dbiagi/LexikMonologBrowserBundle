@@ -193,3 +193,5 @@ ToDo
 * configure Processors to push into the Handler
 * abstract handler and connector for Doctrine and browse another like Elasticsearh
 * write Tests
+* add suport to MongoDB
+* update docs
