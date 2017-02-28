@@ -4,10 +4,12 @@ namespace Lexik\Bundle\MonologBrowserBundle\Handler;
 
 use Doctrine\DBAL\Connection;
 use Lexik\Bundle\MonologBrowserBundle\Formatter\NormalizerFormatter;
+use Lexik\Bundle\MonologBrowserBundle\Processor\TokenProcessor;
 use Lexik\Bundle\MonologBrowserBundle\Processor\WebExtendedProcessor;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Monolog\Processor\WebProcessor;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
  * Handler to send messages to a database through Doctrine DBAL.
@@ -26,12 +28,13 @@ class DoctrineDBALHandler extends AbstractProcessingHandler {
     private $tableName;
 
     /**
-     * @param Connection $connection
-     * @param string $tableName
-     * @param int $level
-     * @param boolean $bubble
+     * @param Connection   $connection
+     * @param TokenStorage $tokenStorage
+     * @param string       $tableName
+     * @param int          $level
+     * @param boolean      $bubble
      */
-    public function __construct(Connection $connection, $tableName, $level = Logger::DEBUG, $bubble = true) {
+    public function __construct(Connection $connection, TokenStorage $tokenStorage, $tableName, $level = Logger::DEBUG, $bubble = true) {
         $this->connection = $connection;
         $this->tableName = $tableName;
 
@@ -39,6 +42,7 @@ class DoctrineDBALHandler extends AbstractProcessingHandler {
 
         $this->pushProcessor(new WebProcessor());
         $this->pushProcessor(new WebExtendedProcessor());
+        $this->pushProcessor(new TokenProcessor($tokenStorage));
     }
 
     /**
