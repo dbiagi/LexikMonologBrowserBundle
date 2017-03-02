@@ -1,11 +1,7 @@
-.wrapper {
-    margin-top: 15px;
-}
+body { word-wrap: break-word; }
+.wrapper { margin-top: 75px; }
+.bg-error { background-color: #f2dede; }
 
-.bg-error {
-    background-color: #f2dede;
-}
-
-body {
-    word-wrap: break-word;
-}
+/* Search form */
+.search-form{ text-align: center; }
+.search-form label { margin: 0; }

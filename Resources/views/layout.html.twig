@@ -16,6 +16,8 @@
         </script>
     </head>
     <body>
+        {% block monolog_browser_navbar %}{% endblock %}
+
         <div class="container wrapper">
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}

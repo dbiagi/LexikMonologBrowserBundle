@@ -20,14 +20,11 @@ class DefaultController extends Controller {
         try {
             $query = $this->getLogRepository()->getLogsQueryBuilder();
 
-            $filter = $this->createForm(
-                LogSearchType::class,
-                null,
-                array(
-                    'query_builder' => $query,
-                    'log_levels'    => $this->getLogRepository()->getLogsLevel(),
-                )
-            );
+            $filter = $this->createForm(LogSearchType::class, null, [
+                'query_builder' => $query,
+                'log_levels'    => $this->getLogRepository()->getLogsLevel(),
+                'method'        => 'get',
+            ]);
 
             $filter->submit($request->get($filter->getName()));
 
@@ -38,17 +35,14 @@ class DefaultController extends Controller {
             );
         } catch (DBALException $e) {
             $this->get('session')->getFlashBag()->add('error', $e->getMessage());
-            $pagination = array();
+            $pagination = [];
         }
 
-        return $this->render(
-            'LexikMonologBrowserBundle:Default:index.html.twig',
-            array(
-                'filter'      => isset($filter) ? $filter->createView() : null,
-                'pagination'  => $pagination,
-                'base_layout' => $this->getBaseLayout(),
-            )
-        );
+        return $this->render('LexikMonologBrowserBundle:Default:index.html.twig', [
+            'filter'      => isset($filter) ? $filter->createView() : null,
+            'pagination'  => $pagination,
+            'base_layout' => $this->getBaseLayout(),
+        ]);
     }
 
     /**
@@ -72,14 +66,11 @@ class DefaultController extends Controller {
             10
         );
 
-        return $this->render(
-            'LexikMonologBrowserBundle:Default:show.html.twig',
-            array(
-                'log'          => $log,
-                'similar_logs' => $similarLogs,
-                'base_layout'  => $this->getBaseLayout(),
-            )
-        );
+        return $this->render('LexikMonologBrowserBundle:Default:show.html.twig', [
+            'log'          => $log,
+            'similar_logs' => $similarLogs,
+            'base_layout'  => $this->getBaseLayout(),
+        ]);
     }
 
     /**

@@ -22,60 +22,37 @@ class LogSearchType extends AbstractType {
      */
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add(
-                'term',
-                FormTypes\SearchType::class,
-                array(
-                    'required' => false,
-                )
-            )
-            ->add(
-                'level',
-                FormTypes\ChoiceType::class,
-                array(
-                    'translation_domain' => 'LexikMonologBrowserBundle',
-                    'choices'            => $options['log_levels'],
-                    'required'           => false,
-                )
-            )
-            ->add(
-                'date_from',
-                FormTypes\DateType::class,
-                array(
-                    'widget'   => 'single_text',
-                    'format'   => 'dd/MM/yyyy',
-                    'html5'    => false,
-                    'required' => false,
-                )
-            )
-            ->add(
-                'time_from',
-                FormTypes\TimeType::class,
-                [
-                    'widget'   => 'single_text',
-                    'input'    => 'timestamp',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'date_to',
-                FormTypes\DateType::class,
-                array(
-                    'widget'   => 'single_text',
-                    'format'   => 'dd/MM/yyyy',
-                    'html5'    => false,
-                    'required' => false,
-                )
-            )
-            ->add(
-                'time_to',
-                FormTypes\TimeType::class,
-                [
-                    'widget'   => 'single_text',
-                    'input'    => 'timestamp',
-                    'required' => false,
-                ]
-            );
+            ->add('term', FormTypes\SearchType::class, [
+                'required' => false,
+            ])
+            ->add('level', FormTypes\ChoiceType::class, [
+                'translation_domain' => 'LexikMonologBrowserBundle',
+                'choices'            => $options['log_levels'],
+                'required'           => false,
+                'placeholder'        => 'log.search.level',
+            ])
+            ->add('date_from', FormTypes\DateType::class, [
+                'widget'   => 'single_text',
+                'format'   => 'dd/MM/yyyy',
+                'html5'    => false,
+                'required' => false,
+            ])
+            ->add('time_from', FormTypes\TimeType::class, [
+                'widget'   => 'single_text',
+                'input'    => 'timestamp',
+                'required' => false,
+            ])
+            ->add('date_to', FormTypes\DateType::class, [
+                'widget'   => 'single_text',
+                'format'   => 'dd/MM/yyyy',
+                'html5'    => false,
+                'required' => false,
+            ])
+            ->add('time_to', FormTypes\TimeType::class, [
+                'widget'   => 'single_text',
+                'input'    => 'timestamp',
+                'required' => false,
+            ]);
 
         $qb = $options['query_builder'];
         $convertDateToDatabaseValue = function (\DateTime $date) use ($qb) {
@@ -85,8 +62,7 @@ class LogSearchType extends AbstractType {
             );
         };
 
-        $builder->addEventListener(
-            FormEvents::POST_SUBMIT,
+        $builder->addEventListener(FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($qb, $convertDateToDatabaseValue) {
                 $data = $event->getData();
 
@@ -127,15 +103,15 @@ class LogSearchType extends AbstractType {
     public function configureOptions(OptionsResolver $resolver) {
         $resolver
             ->setRequired(
-                array(
+                [
                     'query_builder',
-                )
+                ]
             )
             ->setDefaults(
-                array(
-                    'log_levels'      => array(),
+                [
+                    'log_levels'      => [],
                     'csrf_protection' => false,
-                )
+                ]
             )
             ->setAllowedTypes('log_levels', 'array')
             ->setAllowedTypes('query_builder', '\Doctrine\DBAL\Query\QueryBuilder');
