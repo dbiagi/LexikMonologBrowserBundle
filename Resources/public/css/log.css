@@ -1,5 +1,6 @@
 body { word-wrap: break-word; }
-.wrapper { margin-top: 75px; }
+nav+.container { margin-top: 75px; }
+.wrapper { margin-top: 15px; }
 .bg-error { background-color: #f2dede; }
 
 /* Search form */
