@@ -33,7 +33,7 @@
             <li><a href="#user" data-toggle="tab">{{ 'log.show.user' | trans }}</a></li>
             <li>
                 <a href="#similar" data-toggle="tab">
-                    {{ 'log.show.similar' | trans }} {{ utils.render_count_badge(similar_logs | length) }}
+                    {{ 'log.show.similar' | trans }} {{ utils.render_count_badge(similar_logs.totalItemCount) }}
                 </a>
             </li>
         </ul>
