@@ -17,29 +17,36 @@ class DefaultController extends Controller {
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request) {
-        try {
-            $query = $this->getLogRepository()->getLogsQueryBuilder();
+        $criteria = [];
 
-            $filter = $this->createForm(LogSearchType::class, null, [
-                'query_builder' => $query,
-                'log_levels'    => $this->getLogRepository()->getLogsLevel(),
-                'method'        => 'get',
-            ]);
+        $filter = $this->createForm(LogSearchType::class, $criteria, [
+            'method' => 'get',
+        ]);
 
-            $filter->submit($request->get($filter->getName()));
+        $filter->handleRequest($request);
 
-            $pagination = $this->get('knp_paginator')->paginate(
-                $query,
-                $request->query->get('page', 1),
-                $this->container->getParameter('lexik_monolog_browser.logs_per_page')
-            );
-        } catch (DBALException $e) {
-            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
-            $pagination = [];
+        if ($filter->isValid()) {
+            $criteria = $filter->getData();
         }
 
+        $criteria['order_by'] = $request->query->get('sort');
+        $criteria['direction'] = $request->query->get('direction');
+
+        try {
+            $query = $this->getLogRepository()->getLogsQueryBuilder($criteria);
+        } catch (DBALException $e) {
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+            $query = [];
+        }
+
+        $pagination = $this->get('knp_paginator')->paginate(
+            $query,
+            $request->query->get('page', 1),
+            $this->container->getParameter('lexik_monolog_browser.logs_per_page')
+        );
+
         return $this->render('LexikMonologBrowserBundle:Default:index.html.twig', [
-            'filter'      => isset($filter) ? $filter->createView() : null,
+            'filter'      => $filter->createView(),
             'pagination'  => $pagination,
             'base_layout' => $this->getBaseLayout(),
         ]);

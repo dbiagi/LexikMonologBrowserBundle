@@ -2,12 +2,10 @@
 
 namespace Lexik\Bundle\MonologBrowserBundle\Form;
 
-use Doctrine\DBAL\Types\Type;
+use Lexik\Bundle\MonologBrowserBundle\Model\LogRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type as FormTypes;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -16,6 +14,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class LogSearchType extends AbstractType {
 
     const NAME = 'search';
+
+    /** @var LogRepository */
+    private $logRepository;
+
+    function __construct(LogRepository $logRepository) {
+        $this->logRepository = $logRepository;
+    }
 
     /**
      * {@inheritdoc}
@@ -27,7 +32,7 @@ class LogSearchType extends AbstractType {
             ])
             ->add('level', FormTypes\ChoiceType::class, [
                 'translation_domain' => 'LexikMonologBrowserBundle',
-                'choices'            => $options['log_levels'],
+                'choices'            => $this->logRepository->getLogsLevel(),
                 'required'           => false,
                 'placeholder'        => 'log.search.level',
             ])
@@ -53,77 +58,20 @@ class LogSearchType extends AbstractType {
                 'input'    => 'timestamp',
                 'required' => false,
             ]);
-
-        $qb = $options['query_builder'];
-        $convertDateToDatabaseValue = function (\DateTime $date) use ($qb) {
-            return Type::getType('datetime')->convertToDatabaseValue(
-                $date,
-                $qb->getConnection()->getDatabasePlatform()
-            );
-        };
-
-        $builder->addEventListener(FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($qb, $convertDateToDatabaseValue) {
-                $data = $event->getData();
-
-                if (null !== $data['term']) {
-                    $qb->andWhere('l.message LIKE :message')
-                        ->setParameter('message', '%'.str_replace(' ', '%', $data['term']).'%')
-                        ->orWhere('l.channel LIKE :channel')
-                        ->setParameter('channel', $data['term'].'%');
-                }
-
-                if (null !== $data['level']) {
-                    $qb->andWhere('l.level = :level')
-                        ->setParameter('level', $data['level']);
-                }
-
-                if ($data['date_from'] instanceof \DateTime) {
-                    if (isset($data['time_from']) && $data['time_from']) {
-                        $data['date_from']->setTimestamp($data['date_from']->getTimestamp() + $data['time_from']);
-                    }
-                    $qb->andWhere('l.datetime >= :date_from')
-                        ->setParameter('date_from', $convertDateToDatabaseValue($data['date_from']));
-                }
-
-                if ($data['date_to'] instanceof \DateTime) {
-                    if (isset($data['time_to']) && $data['time_to']) {
-                        $data['date_to']->setTimestamp($data['date_to']->getTimestamp() + $data['time_to']);
-                    }
-                    $qb->andWhere('l.datetime <= :date_to')
-                        ->setParameter('date_to', $convertDateToDatabaseValue($data['date_to']));
-                }
-            }
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function configureOptions(OptionsResolver $resolver) {
-        $resolver
-            ->setRequired(
-                [
-                    'query_builder',
-                ]
-            )
-            ->setDefaults(
-                [
-                    'log_levels'      => [],
-                    'csrf_protection' => false,
-                ]
-            )
-            ->setAllowedTypes('log_levels', 'array')
-            ->setAllowedTypes('query_builder', '\Doctrine\DBAL\Query\QueryBuilder');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName() {
-        return static::NAME;
+    public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setDefaults([
+            'csrf_protection' => false
+        ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getBlockPrefix() {
         return static::NAME;
     }

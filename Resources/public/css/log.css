@@ -6,3 +6,6 @@ nav+.container { margin-top: 75px; }
 /* Search form */
 .search-form{ text-align: center; }
 .search-form label { margin: 0; }
+
+.monolog-browser-results th>a.asc:after{ font-family:"Glyphicons Halflings"; content: "\e113"; font-size: 10px; margin-left: 4px; }
+.monolog-browser-results th>a.desc:after{ font-family:"Glyphicons Halflings"; content: "\e114"; font-size: 10px; margin-left: 4px;}

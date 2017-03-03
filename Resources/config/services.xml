@@ -27,5 +27,11 @@
             <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection"/>
             <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
         </service>
+
+        <service id="lexik_monolog_browser.form.log_search_type"
+                class="Lexik\Bundle\MonologBrowserBundle\Form\LogSearchType">
+            <argument type="service" id="lexik_monolog_browser.model.log_repository"/>
+            <tag name="form.type" />
+        </service>
     </services>
 </container>
