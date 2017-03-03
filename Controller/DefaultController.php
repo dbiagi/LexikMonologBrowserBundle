@@ -17,7 +17,10 @@ class DefaultController extends Controller {
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request) {
-        $criteria = [];
+        $criteria = [
+            'order_by'  => $request->query->get('sort', null),
+            'direction' => $request->query->get('direction', null),
+        ];
 
         $filter = $this->createForm(LogSearchType::class, $criteria, [
             'method' => 'get',
@@ -28,9 +31,6 @@ class DefaultController extends Controller {
         if ($filter->isValid()) {
             $criteria = $filter->getData();
         }
-
-        $criteria['order_by'] = $request->query->get('sort');
-        $criteria['direction'] = $request->query->get('direction');
 
         try {
             $query = $this->getLogRepository()->getLogsQueryBuilder($criteria);
