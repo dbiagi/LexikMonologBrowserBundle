@@ -37,10 +37,11 @@ class LogSearchType extends AbstractType {
                 'placeholder'        => 'log.search.level',
             ])
             ->add('date_from', FormTypes\DateType::class, [
-                'widget'   => 'single_text',
-                'format'   => 'dd/MM/yyyy',
-                'html5'    => false,
-                'required' => false,
+                'widget'      => 'single_text',
+                'format'      => $options['date_format'],
+                'html5'       => false,
+                'required'    => false,
+                'placeholder' => null,
             ])
             ->add('time_from', FormTypes\TimeType::class, [
                 'widget'   => 'single_text',
@@ -48,10 +49,11 @@ class LogSearchType extends AbstractType {
                 'required' => false,
             ])
             ->add('date_to', FormTypes\DateType::class, [
-                'widget'   => 'single_text',
-                'format'   => 'dd/MM/yyyy',
-                'html5'    => false,
-                'required' => false,
+                'widget'      => 'single_text',
+                'format'      => $options['date_format'],
+                'html5'       => false,
+                'required'    => false,
+                'placeholder' => null,
             ])
             ->add('time_to', FormTypes\TimeType::class, [
                 'widget'   => 'single_text',
@@ -65,7 +67,8 @@ class LogSearchType extends AbstractType {
      */
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults([
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'date_format'     => 'dd/mm/Y',
         ]);
     }
 

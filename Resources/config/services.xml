@@ -33,5 +33,11 @@
             <argument type="service" id="lexik_monolog_browser.model.log_repository"/>
             <tag name="form.type" />
         </service>
+
+        <service id="lexik_monolog_browser.twig_extension"
+                class="Lexik\Bundle\MonologBrowserBundle\Twig\TwigExtension">
+            <argument>%lexik_monolog_browser.date_format%</argument>
+            <tag name="twig.extension"/>
+        </service>
     </services>
 </container>

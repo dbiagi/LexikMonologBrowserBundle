@@ -26,7 +26,7 @@ class LexikMonologBrowserExtension extends Extension {
 
         $container->setParameter('lexik_monolog_browser.base_layout', $config['base_layout']);
         $container->setParameter('lexik_monolog_browser.logs_per_page', $config['logs_per_page']);
-
+        $container->setParameter('lexik_monolog_browser.date_format', $config['date_format']);
         $container->setParameter('lexik_monolog_browser.doctrine.table_name', $config['doctrine']['table_name']);
 
         if (isset($config['doctrine']['connection_name'])) {

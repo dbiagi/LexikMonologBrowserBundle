@@ -24,11 +24,12 @@ class DefaultController extends Controller {
 
         $filter = $this->createForm(LogSearchType::class, $criteria, [
             'method' => 'get',
+            'date_format' => $this->container->getParameter('lexik_monolog_browser.date_format')
         ]);
 
         $filter->handleRequest($request);
 
-        if ($filter->isValid()) {
+        if ($filter->isSubmitted() && $filter->isValid()) {
             $criteria = $filter->getData();
         }
 

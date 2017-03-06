@@ -1,5 +1,4 @@
 body { word-wrap: break-word; }
-nav+.container { margin-top: 75px; }
 .wrapper { margin-top: 15px; }
 .bg-error { background-color: #f2dede; }
 
@@ -9,3 +8,6 @@ nav+.container { margin-top: 75px; }
 
 .monolog-browser-results th>a.asc:after{ font-family:"Glyphicons Halflings"; content: "\e113"; font-size: 10px; margin-left: 4px; }
 .monolog-browser-results th>a.desc:after{ font-family:"Glyphicons Halflings"; content: "\e114"; font-size: 10px; margin-left: 4px;}
+
+input.datepicker { max-width: 120px }
+input.hour { max-width: 120px; }

@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author Jeremy Barthe <j.barthe@lexik.fr>
  */
 class LogRepository {
+
     /**
      * @var Connection $conn
      */
@@ -45,7 +46,13 @@ class LogRepository {
     public function getLogsQueryBuilder($criteria = []) {
         $qb = $this->createQueryBuilder()
             ->select(
-                'l.channel, l.level, l.level_name, l.message, MAX(l.id) AS id, MAX(l.datetime) AS datetime, COUNT(l.id) AS count'
+                'l.channel, 
+                l.level, 
+                l.level_name, 
+                l.message, 
+                MAX(l.id) AS id, 
+                MAX(l.datetime) AS datetime, 
+                COUNT(l.id) AS count'
             )
             ->from($this->tableName, 'l')
             ->groupBy('l.channel, l.level, l.level_name, l.message')
@@ -160,16 +167,17 @@ class LogRepository {
         }
 
         if ($criteria['date_from'] instanceof \DateTime) {
-            if (isset($criteria['time_from']) && $criteria['time_from']) {
-                $criteria['date_from']->setTimestamp($criteria['date_from']->getTimestamp() + $criteria['time_from']);
+            if ($criteria['time_from']) {
+                $criteria['date_from']->setTime(date('G', $criteria['time_from']), date('i', $criteria['time_from']));
             }
+
             $qb->andWhere('l.datetime >= :date_from')
                 ->setParameter('date_from', $this->convertDateToDatabaseValue($criteria['date_from'], $qb));
         }
 
         if ($criteria['date_to'] instanceof \DateTime) {
-            if (isset($criteria['time_to']) && $criteria['time_to']) {
-                $criteria['date_to']->setTimestamp($criteria['date_to']->getTimestamp() + $criteria['time_to']);
+            if ($criteria['time_to']) {
+                $criteria['date_to']->setTime(date('G', $criteria['time_to']), date('i', $criteria['time_to']));
             }
             $qb->andWhere('l.datetime <= :date_to')
                 ->setParameter('date_to', $this->convertDateToDatabaseValue($criteria['date_to'], $qb));
@@ -181,7 +189,7 @@ class LogRepository {
     }
 
     protected function convertDateToDatabaseValue(\DateTime $date, QueryBuilder $qb) {
-        return Type::getType('datetime')->convertToDatabaseValue(
+        return Type::getType(Type::DATETIME)->convertToDatabaseValue(
             $date,
             $qb->getConnection()->getDatabasePlatform()
         );
