@@ -1,6 +1,7 @@
 {% macro render_level_label(level, label, attr) %}
     {% set level_class = '' %}
     {% if level == constant('Monolog\\Logger::DEBUG') %}
+        {% set level_class = 'label-default' %}
     {% elseif level == constant('Monolog\\Logger::INFO') %}
         {% set level_class = 'label-info' %}
     {% elseif level == constant('Monolog\\Logger::NOTICE') %}
