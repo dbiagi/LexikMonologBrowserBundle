@@ -18,6 +18,7 @@ class LexikMonologBrowserExtension extends Extension {
      * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container) {
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -34,15 +35,6 @@ class LexikMonologBrowserExtension extends Extension {
                 'lexik_monolog_browser.doctrine_dbal.connection',
                 sprintf('doctrine.dbal.%s_connection', $config['doctrine']['connection_name'])
             );
-        }
-
-        if (isset($config['doctrine']['connection'])) {
-            $connectionDefinition = new Definition(
-                'Doctrine\DBAL\Connection', array($config['doctrine']['connection'])
-            );
-            $connectionDefinition->setFactoryClass('Doctrine\DBAL\DriverManager');
-            $connectionDefinition->setFactoryMethod('getConnection');
-            $container->setDefinition('lexik_monolog_browser.doctrine_dbal.connection', $connectionDefinition);
         }
     }
 }
