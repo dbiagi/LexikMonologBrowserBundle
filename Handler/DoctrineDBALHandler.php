@@ -2,22 +2,21 @@
 
 namespace Lexik\Bundle\MonologBrowserBundle\Handler;
 
+use Doctrine\DBAL\Connection;
+use Lexik\Bundle\MonologBrowserBundle\Formatter\NormalizerFormatter;
+use Lexik\Bundle\MonologBrowserBundle\Processor\TokenProcessor;
+use Lexik\Bundle\MonologBrowserBundle\Processor\WebExtendedProcessor;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Monolog\Processor\WebProcessor;
-
-use Doctrine\DBAL\Connection;
-
-use Lexik\Bundle\MonologBrowserBundle\Processor\WebExtendedProcessor;
-use Lexik\Bundle\MonologBrowserBundle\Formatter\NormalizerFormatter;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
  * Handler to send messages to a database through Doctrine DBAL.
  *
  * @author Jeremy Barthe <j.barthe@lexik.fr>
  */
-class DoctrineDBALHandler extends AbstractProcessingHandler
-{
+class DoctrineDBALHandler extends AbstractProcessingHandler {
     /**
      * @var Connection $connection
      */
@@ -29,40 +28,50 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     private $tableName;
 
     /**
-     * @param Connection $connection
-     * @param string     $tableName
-     * @param int        $level
-     * @param string     $bubble
+     * @param TokenStorage $tokenStorage
+     * @param              $serializer
+     * @param bool|int     $level
+     * @param boolean      $bubble
      */
-    public function __construct(Connection $connection, $tableName, $level = Logger::DEBUG, $bubble = true)
-    {
-        $this->connection = $connection;
-        $this->tableName  = $tableName;
-
+    public function __construct(TokenStorage $tokenStorage, $serializer, $level = Logger::DEBUG, $bubble = true) {
         parent::__construct($level, $bubble);
 
         $this->pushProcessor(new WebProcessor());
         $this->pushProcessor(new WebExtendedProcessor());
+        $this->pushProcessor(new TokenProcessor($tokenStorage, $serializer));
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    public function setConnection(Connection $connection) {
+        $this->connection = $connection;
+    }
+
+    /**
+     * @param string $tableName
+     */
+    public function setTableName($tableName) {
+        $this->tableName = $tableName;
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record)
-    {
+    protected function write(array $record) {
         $record = $record['formatted'];
 
         try {
             $this->connection->insert($this->tableName, $record);
         } catch (\Exception $e) {
+            echo $e->getMessage();
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultFormatter()
-    {
+    protected function getDefaultFormatter() {
         return new NormalizerFormatter();
     }
 }

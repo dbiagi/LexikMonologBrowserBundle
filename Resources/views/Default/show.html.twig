@@ -30,7 +30,12 @@
             <li class="active"><a href="#extra" data-toggle="tab">{{ 'log.show.extra' | trans }}</a></li>
             <li><a href="#context" data-toggle="tab">{{ 'log.show.context' | trans }}</a></li>
             <li><a href="#request" data-toggle="tab">{{ 'log.show.request' | trans }}</a></li>
-            <li><a href="#similar" data-toggle="tab">{{ 'log.show.similar' | trans }} {{ utils.render_count_badge(similar_logs | length) }}</a></li>
+            <li><a href="#user" data-toggle="tab">{{ 'log.show.user' | trans }}</a></li>
+            <li>
+                <a href="#similar" data-toggle="tab">
+                    {{ 'log.show.similar' | trans }} {{ utils.render_count_badge(similar_logs.totalItemCount) }}
+                </a>
+            </li>
         </ul>
         <div class="tab-content">
             {% import _self as show_macros %}
@@ -48,18 +53,22 @@
                 <h2>GET</h2>
                 {{ show_macros.render_data_table(log.getData) }}
             </div>
+            <div class="tab-pane" id="user">
+                <h2>User Data</h2>
+                {{ show_macros.render_data_table(log.userData) }}
+            </div>
             <div class="tab-pane" id="similar">
                 {% if similar_logs | length %}
                     <table class="table table-stripped monolog-browser-results">
                         <thead>
-                            <tr>
-                                <th>{{ knp_pagination_sortable(similar_logs, 'log.results.datetime' | trans, 'l.datetime') }}</th>
-                                <th>{{ knp_pagination_sortable(similar_logs, 'log.results.message' | trans, 'l.message') }}</th>
-                                <th></th>
-                            </tr>
+                        <tr>
+                            <th>{{ knp_pagination_sortable(similar_logs, 'log.results.datetime' | trans, 'l.datetime') }}</th>
+                            <th>{{ knp_pagination_sortable(similar_logs, 'log.results.message' | trans, 'l.message') }}</th>
+                            <th></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {% for log in similar_logs %}
+                        {% for log in similar_logs %}
                             <tr>
                                 <td>{{ date(log.datetime) | date('F j H:i:s') }}</td>
                                 <td>
@@ -71,7 +80,7 @@
                                     {{ utils.render_level_label(log.level, (log.channel ~ '.' ~ log.level_name)) }}
                                 </td>
                             </tr>
-                            {% endfor %}
+                        {% endfor %}
                         </tbody>
                     </table>
 
@@ -87,12 +96,16 @@
 {% macro render_data_table(data) %}
     <table class="table table-striped">
         <tbody>
-            {% for label, value in data %}
-                <tr>
-                    <th>{{ label }}</th>
+        {% for label, value in data %}
+            <tr>
+                <th>{{ label }}</th>
+                {% if value is iterable %}
+                    <td>{{ value|join(', ') }}</td>
+                {% else %}
                     <td>{{ value }}</td>
-                </tr>
-            {% endfor %}
+                {% endif %}
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
 {% endmacro %}

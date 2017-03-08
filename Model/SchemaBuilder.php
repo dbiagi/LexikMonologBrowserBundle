@@ -3,15 +3,14 @@
 namespace Lexik\Bundle\MonologBrowserBundle\Model;
 
 use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaDiff;
-use Doctrine\DBAL\Schema\Comparator;
 
 /**
  * @author Jeremy Barthe <j.barthe@lexik.fr>
  */
-class SchemaBuilder
-{
+class SchemaBuilder {
     /**
      * @var Connection $conn
      */
@@ -24,15 +23,16 @@ class SchemaBuilder
      */
     protected $schema;
 
-    public function __construct(Connection $conn, $tableName)
-    {
-        $this->conn      = $conn;
+    public function __construct(Connection $conn, $tableName) {
+        $this->conn = $conn;
         $this->tableName = $tableName;
 
         $this->schema = new Schema();
 
         $entryTable = $this->schema->createTable($this->tableName);
         $entryTable->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
+        $entryTable->addColumn('username', 'string', array('length' => 255, 'notNull' => false));
+        $entryTable->addColumn('user_data', 'text', array('notNull' => false));
         $entryTable->addColumn('channel', 'string', array('length' => 255, 'notNull' => true));
         $entryTable->addColumn('level', 'integer', array('notNull' => true));
         $entryTable->addColumn('level_name', 'string', array('length' => 255, 'notNull' => true));
@@ -46,22 +46,19 @@ class SchemaBuilder
         $entryTable->setPrimaryKey(array('id'));
     }
 
-    public function create(\Closure $logger = null)
-    {
+    public function create(\Closure $logger = null) {
         $queries = $this->schema->toSql($this->conn->getDatabasePlatform());
 
         $this->executeQueries($queries, $logger);
     }
 
-    public function update(\Closure $logger = null)
-    {
+    public function update(\Closure $logger = null) {
         $queries = $this->getSchemaDiff()->toSaveSql($this->conn->getDatabasePlatform());
 
         $this->executeQueries($queries, $logger);
     }
 
-    public function getSchemaDiff()
-    {
+    public function getSchemaDiff() {
         $diff = new SchemaDiff();
         $comparator = new Comparator();
 
@@ -77,8 +74,7 @@ class SchemaBuilder
         return $diff;
     }
 
-    protected function executeQueries(array $queries, \Closure $logger = null)
-    {
+    protected function executeQueries(array $queries, \Closure $logger = null) {
         $this->conn->beginTransaction();
 
         try {

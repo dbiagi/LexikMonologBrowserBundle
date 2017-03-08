@@ -4,6 +4,7 @@ log:
         level:      Level
         date_from:  From
         date_to:    To
+        all:        All
     results:
         datetime:   Date
         message:    Message
@@ -12,4 +13,5 @@ log:
         extra:      Extra
         context:    Context
         request:    Request
+        user:       User
         similar:    Similar logs

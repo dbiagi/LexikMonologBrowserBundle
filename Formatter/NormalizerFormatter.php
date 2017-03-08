@@ -4,10 +4,8 @@ namespace Lexik\Bundle\MonologBrowserBundle\Formatter;
 
 use Monolog\Formatter\NormalizerFormatter as BaseFormatter;
 
-class NormalizerFormatter extends BaseFormatter
-{
-    protected function normalize($data)
-    {
+class NormalizerFormatter extends BaseFormatter {
+    protected function normalize($data) {
         $data = parent::normalize($data);
 
         if (is_array($data)) {

@@ -1,5 +1,8 @@
-$(function() {
+$(function () {
     $('.datepicker').datepicker({
-        format: 'mm/dd/yyyy'
+        format:         window.log_browser_options.date_format,
+        autoclose:      true,
+        todayHighlight: true,
+        locale: window.log_browser_options.locale,
     });
 });

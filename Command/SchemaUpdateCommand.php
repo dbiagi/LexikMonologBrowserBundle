@@ -2,33 +2,29 @@
 
 namespace Lexik\Bundle\MonologBrowserBundle\Command;
 
+use Lexik\Bundle\MonologBrowserBundle\Model\SchemaBuilder;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use Lexik\Bundle\MonologBrowserBundle\Model\SchemaBuilder;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * @author Jeremy Barthe <j.barthe@lexik.fr>
  */
-class SchemaUpdateCommand extends ContainerAwareCommand
-{
+class SchemaUpdateCommand extends ContainerAwareCommand {
     /**
      * {@inheritdoc}
      */
-    protected function configure()
-    {
+    protected function configure() {
         $this
             ->setName('lexik:monolog-browser:schema-update')
-            ->setDescription('Update Monolog table from schema')
-        ;
+            ->setDescription('Update Monolog table from schema');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
+    protected function execute(InputInterface $input, OutputInterface $output) {
         $connection = $this->getContainer()->get('lexik_monolog_browser.doctrine_dbal.connection');
         $tableName = $this->getContainer()->getParameter('lexik_monolog_browser.doctrine.table_name');
 
@@ -42,25 +38,35 @@ class SchemaUpdateCommand extends ContainerAwareCommand
             return;
         }
 
-        $output->writeln('<comment>ATTENTION</comment>: This operation may not be executed in a production environment, use Doctrine Migrations instead.');
-        $output->writeln(sprintf('<info>SQL operations to execute to Monolog table "<comment>%s</comment>":</info>', $tableName));
-        $output->writeln(implode(';' . PHP_EOL, $sqls));
+        $output->writeln(
+            '<comment>ATTENTION</comment>: This operation may not be executed in a production environment, use Doctrine Migrations instead.'
+        );
+        $output->writeln(
+            sprintf('<info>SQL operations to execute to Monolog table "<comment>%s</comment>":</info>', $tableName)
+        );
+        $output->writeln(implode(';'.PHP_EOL, $sqls));
 
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$dialog->askConfirmation(
-                $output,
-                '<question>Do you want to execute these SQL operations?</question>',
-                false
-            )) {
+        $helper = $this->getHelperSet()->get('question');
+        $question = new ConfirmationQuestion('Do you want to execute these SQL operations?');
+
+        if (!$helper->ask($input, $output, $question)) {
             return;
         }
 
         $error = false;
         try {
             $schemaBuilder->update();
-            $output->writeln(sprintf('<info>Successfully updated Monolog table "<comment>%s</comment>"! "%s" queries were executed</info>', $tableName, count($sqls)));
+            $output->writeln(
+                sprintf(
+                    '<info>Successfully updated Monolog table "<comment>%s</comment>"! "%s" queries were executed</info>',
+                    $tableName,
+                    count($sqls)
+                )
+            );
         } catch (\Exception $e) {
-            $output->writeln(sprintf('<error>Could not update Monolog table "<comment>%s</comment>"...</error>', $tableName));
+            $output->writeln(
+                sprintf('<error>Could not update Monolog table "<comment>%s</comment>"...</error>', $tableName)
+            );
             $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             $error = true;
         }

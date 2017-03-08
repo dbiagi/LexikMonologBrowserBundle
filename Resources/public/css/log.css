@@ -1,22 +1,13 @@
-.monolog-browser-header h1 {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 22px;
-    font-weight: normal;
-    line-height: 30px;
-    color: #313131;
-    word-break: break-all;
-}
+body { word-wrap: break-word; }
+.wrapper { margin-top: 15px; }
+.bg-error { background-color: #f2dede; }
 
-table.monolog-browser-results td {
-    word-break: break-all;
-    padding: 8px 5px;
-}
-table.monolog-browser-results td:first-child { white-space: nowrap; }
+/* Search form */
+.search-form{ text-align: center; }
+.search-form label { margin: 0; }
 
-.monolog-browser-filters .filter-term input { width: 100%; }
-.monolog-browser-filters .filter-level select { width: 100%; }
-.monolog-browser-filters .filter-datefrom { float: left; margin-right: 10px; }
-.monolog-browser-filters .filter-daterange .datepicker { width: 75px; }
-.monolog-browser-filters .filter-daterange .hour,
-.monolog-browser-filters .filter-daterange .minute { width: 20px; }
-.monolog-browser-filters .filter-submit { padding-top: 25px; }
+.monolog-browser-results th>a.asc:after{ font-family:"Glyphicons Halflings"; content: "\e113"; font-size: 10px; margin-left: 4px; }
+.monolog-browser-results th>a.desc:after{ font-family:"Glyphicons Halflings"; content: "\e114"; font-size: 10px; margin-left: 4px;}
+
+input.datepicker { max-width: 120px }
+input.hour { max-width: 120px; }

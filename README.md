@@ -5,17 +5,17 @@ LexikMonologBrowserBundle
 [![Latest Stable Version](https://poser.pugx.org/lexik/monolog-browser-bundle/v/stable)](https://packagist.org/packages/lexik/monolog-browser-bundle)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d73bade1-4158-4085-aab8-1042d3704a73/mini.png)](https://insight.sensiolabs.com/projects/d73bade1-4158-4085-aab8-1042d3704a73)
 
-This Symfony2 bundle provides a [Doctrine DBAL](https://github.com/doctrine/dbal) handler for [Monolog](https://github.com/Seldaek/monolog) and a web UI to display log entries. You can list, filter and paginate logs as you can see on the screenshot bellow:
+This Symfony bundle provides a [Doctrine DBAL](https://github.com/doctrine/dbal) handler for [Monolog](https://github.com/Seldaek/monolog) and a web UI to display log entries. You can list, filter and paginate logs as you can see on the screenshot bellow:
 
-![Log entries listing](https://github.com/lexik/LexikMonologBrowserBundle/raw/master/Resources/screen/list.jpg)
-![Log entry show](https://github.com/lexik/LexikMonologBrowserBundle/raw/master/Resources/screen/show.jpg)
+![Log entries listing](https://github.com/dbiagi/LexikMonologBrowserBundle/raw/master/Resources/screen/list.jpg)
+![Log entry show](https://github.com/dbiagi/LexikMonologBrowserBundle/raw/master/Resources/screen/show.jpg)
 
 As this bundle query your database on each raised log, it's relevant for small and medium projects, but if you have billion of logs consider using a specific log server like [sentry](http://getsentry.com/), [airbrake](https://airbrake.io/), etc.
 
 Requirements:
 ------------
 
-* Symfony 2.1+
+* Symfony 3.1+
 * KnpLabs/KnpPaginatorBundle
 
 Installation
@@ -75,28 +75,6 @@ lexik_monolog_browser:
     doctrine:
         connection_name: monolog
 ```
-
-**By creating a custom Doctrine connection for the bundle:**
-
-``` yaml
-# app/config/config.yml
-lexik_monolog_browser:
-    doctrine:
-        connection:
-            driver:      pdo_sqlite
-            driverClass: ~
-            pdo:         ~
-            dbname:      monolog
-            host:        localhost
-            port:        ~
-            user:        root
-            password:    ~
-            charset:     UTF8
-            path:        %kernel.root_dir%/db/monolog.db # The filesystem path to the database file for SQLite
-            memory:      ~                               # True if the SQLite database should be in-memory (non-persistent)
-            unix_socket: ~                               # The unix socket to use for MySQL
-```
-
 Please refer to the [Doctrine DBAL connection configuration](http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#configuration) for more details.
 
 Optionally you can override the schema table name (`monolog_entries` by default):
@@ -140,6 +118,8 @@ monolog:
             type:         service
             id:           lexik_monolog_browser.handler.doctrine_dbal
 ```
+
+Make sure to especify a channel for the log browser handler to avoid DI circular references. 
 
 Now you have enabled and configured the handler, you migth want to display log entries, just import the routing file:
 
@@ -193,3 +173,5 @@ ToDo
 * configure Processors to push into the Handler
 * abstract handler and connector for Doctrine and browse another like Elasticsearh
 * write Tests
+* add suport to MongoDB
+* update docs

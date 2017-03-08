@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="lexik_monolog_browser.handler.doctrine_dbal.class">Lexik\Bundle\MonologBrowserBundle\Handler\DoctrineDBALHandler</parameter>
@@ -10,14 +10,34 @@
     </parameters>
 
     <services>
-        <service id="lexik_monolog_browser.handler.doctrine_dbal" class="%lexik_monolog_browser.handler.doctrine_dbal.class%">
-            <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection" />
+        <service id="lexik_monolog_browser.handler.doctrine_dbal"
+                 class="%lexik_monolog_browser.handler.doctrine_dbal.class%">
+            <argument type="service" id="security.token_storage"/>
+            <argument type="service" id="serializer"/>
+            <call method="setConnection">
+                <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection"/>
+            </call>
+            <call method="setTableName">
+                <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
+            </call>
+        </service>
+
+        <service id="lexik_monolog_browser.model.log_repository"
+                 class="%lexik_monolog_browser.model.log_repository.class%">
+            <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection"/>
             <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
         </service>
 
-        <service id="lexik_monolog_browser.model.log_repository" class="%lexik_monolog_browser.model.log_repository.class%">
-            <argument type="service" id="lexik_monolog_browser.doctrine_dbal.connection" />
-            <argument>%lexik_monolog_browser.doctrine.table_name%</argument>
+        <service id="lexik_monolog_browser.form.log_search_type"
+                class="Lexik\Bundle\MonologBrowserBundle\Form\LogSearchType">
+            <argument type="service" id="lexik_monolog_browser.model.log_repository"/>
+            <tag name="form.type" />
+        </service>
+
+        <service id="lexik_monolog_browser.twig_extension"
+                class="Lexik\Bundle\MonologBrowserBundle\Twig\TwigExtension">
+            <argument>%lexik_monolog_browser.date_format%</argument>
+            <tag name="twig.extension"/>
         </service>
     </services>
 </container>

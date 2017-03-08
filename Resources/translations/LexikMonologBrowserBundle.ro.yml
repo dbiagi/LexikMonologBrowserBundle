@@ -4,6 +4,7 @@ log:
         level:      Nivel
         date_from:  De la
         date_to:    Până la
+        all:        Toate
     results:
         datetime:   Dată
         message:    Mesaj
