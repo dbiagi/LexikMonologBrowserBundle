@@ -19,11 +19,13 @@
     "require": {
         "php": ">=5.5.9",
         "symfony/framework-bundle": "^3.1",
+        "symfony/form": "^3.1",
         "knplabs/knp-paginator-bundle": ">=2.3"
     },
     "require-dev": {
         "monolog/monolog": "~1.2",
-        "doctrine/dbal": "~2.4"
+        "doctrine/dbal": "~2.4",
+        "phpunit/phpunit": "^4.8"
     },
     "autoload": {
         "psr-4": { "Lexik\\Bundle\\MonologBrowserBundle\\": ""}
