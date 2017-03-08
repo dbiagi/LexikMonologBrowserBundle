@@ -1,15 +1,9 @@
 {
-    "name": "dbiagi/monolog-browser-bundle",
+    "name": "lexik/monolog-browser-bundle",
     "type": "symfony-bundle",
     "description": "This Symfony3 bundle provides a Doctrine DBAL handler for Monolog and a web UI to display log entries",
-    "keywords": [
-        "Symfony3",
-        "bundle",
-        "monolog",
-        "logger",
-        "doctrine"
-    ],
-    "homepage": "https://github.com/dbiagi/LexikMonologBrowserBundle",
+    "keywords": ["Symfony3", "bundle", "monolog", "logger", "doctrine"],
+    "homepage": "https://github.com/lexik/LexikMonologBrowserBundle",
     "license": "MIT",
     "authors": [
         {
@@ -32,8 +26,6 @@
         "doctrine/dbal": "~2.4"
     },
     "autoload": {
-        "psr-4": {
-            "Lexik\\Bundle\\MonologBrowserBundle\\": ""
-        }
+        "psr-4": { "Lexik\\Bundle\\MonologBrowserBundle\\": ""}
     }
 }
