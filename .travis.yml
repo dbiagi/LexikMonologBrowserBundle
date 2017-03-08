@@ -13,9 +13,8 @@ php:
     - hhvm
 
 env:
-    - SYMFONY_VERSION=2.7.*
-    - SYMFONY_VERSION=2.8.*
-    - SYMFONY_VERSION=3.0.*
+    - SYMFONY_VERSION=3.1.*
+    - SYMFONY_VERSION=3.2.*
 
 matrix:
     fast_finish: true
@@ -24,7 +23,7 @@ matrix:
         - php: hhvm
 
 before_script:
-    - composer require symfony/framework-bundle:${SYMFONY_VERSION} --no-update
+    - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
 
 install: composer install --prefer-dist --no-interaction
 
