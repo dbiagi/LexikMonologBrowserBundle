@@ -9,7 +9,7 @@ namespace Lexik\Bundle\MonologBrowserBundle\Twig;
  *
  * @author Diego de Biagi <diegobiagiviana@gmail.com>
  */
-class TwigExtension extends \Twig_Extension {
+class TwigExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface {
 
     private $dateFormat;
 
